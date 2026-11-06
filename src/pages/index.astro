@@ -1,6 +1,7 @@
 ---
 import "@fontsource-variable/manrope";
 import "@fontsource-variable/jetbrains-mono";
+import { logo } from "../icons";
 import { me, stack, projects, services, experience, consoleErrors } from "../data";
 const shown = projects.slice(0, 6);
 ---
@@ -11,7 +12,7 @@ const shown = projects.slice(0, 6);
   <meta name="description" content={me.tagline} />
   <style is:global>
     :root{--paper:#fff;--ink:#151515;--soft:#262626;--line:#e8e8e6;--mist:#f5f5f4;--muted:#6b6b6b;--acc:#d9653b;--ok:#3fb56b;--code:#0f0f10;--codeline:#26262a;--panel:#161618}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}
     body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 "Manrope Variable",system-ui,sans-serif}
     .mono{font-family:"JetBrains Mono Variable",ui-monospace,monospace}
     a{color:inherit}
@@ -23,25 +24,30 @@ const shown = projects.slice(0, 6);
     .ch1{display:inline-block;will-change:transform}
     .card{transform-style:preserve-3d;will-change:transform}
     /* nav */
-    nav{position:sticky;top:0;z-index:20;background:#ffffffd9;backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-    nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+    nav{position:fixed;top:12px;left:0;right:0;margin:0 auto;width:fit-content;max-width:calc(100% - 24px);z-index:20;background:#ffffffcc;backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:999px;box-shadow:0 10px 30px #00000018}
+    nav .wrap{display:flex;align-items:center;height:52px;max-width:none;margin:0;padding:0 .4rem 0 1.1rem;justify-content:center;gap:1.5rem}
     .brand{font-weight:800;text-decoration:none;display:flex;gap:.6rem;align-items:center}
-    .avail{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--muted)}
+    .avail{display:inline-flex;align-items:center;gap:.5rem;font-size:1rem;font-weight:600;color:var(--ink)}
     .dot{position:relative;width:8px;height:8px;border-radius:50%;background:var(--ok)}
     .dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--ok);animation:ping 2s ease-out infinite}
     @keyframes ping{to{transform:scale(3);opacity:0}}
-    .links{display:flex;gap:1.6rem;font-size:.9rem}.links a{text-decoration:none;color:var(--muted)}.links a:hover{color:var(--ink)}
-    .links sup{font:.65rem "JetBrains Mono Variable",monospace;color:var(--acc);margin-left:.15rem}
+    .links{display:flex;gap:1.5rem;font-size:1.02rem;font-weight:500}.links a{text-decoration:none;color:var(--muted)}.links a:hover{color:var(--ink)}
+    .links sup{font:.72rem "JetBrains Mono Variable",monospace;color:var(--acc);margin-left:.15rem}
+    nav .btn{padding:.5rem 1.15rem;font-size:.98rem}
     .btn{display:inline-block;background:var(--ink);color:#fff;border:1px solid var(--ink);padding:.7rem 1.3rem;border-radius:999px;text-decoration:none;font-weight:700;font-size:.9rem;cursor:pointer;transition:background .2s,border-color .2s;font-family:inherit}
     .btn:hover{background:var(--acc);border-color:var(--acc);transform:translateY(-2px)}
     .btn.ghost{background:none;color:var(--ink)}.btn.ghost:hover{color:#fff}
     @media(max-width:760px){.links{display:none}}
     /* hero */
-    .hero{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem;align-items:center;padding-top:5rem;padding-bottom:3.5rem}
+    .hero{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem;align-items:center;padding-top:8rem;padding-bottom:3.5rem}
     .eyebrow{font-size:.8rem;color:var(--muted);letter-spacing:.3em}
-    .name{position:relative;font-size:clamp(2.6rem,8vw,6rem);line-height:1;font-weight:800;letter-spacing:-.04em;margin:1rem 0;display:inline-block}
-    .name:hover{animation:glitch 0.4s steps(2) 2}
-    @keyframes glitch{0%{text-shadow:3px 0 var(--acc),-3px 0 #4cc}50%{text-shadow:-3px 0 var(--acc),3px 0 #4cc;transform:translateX(2px)}100%{text-shadow:none}}
+    .name{position:relative;font-size:clamp(2.2rem,6vw,4.6rem);line-height:1.02;font-weight:800;letter-spacing:-.04em;margin:1rem 0;display:inline-block}
+    .name .w{display:inline-block;white-space:nowrap}
+    .name::before,.name::after{content:attr(data-text);position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;clip-path:inset(0 0 100% 0)}
+    .name::before{color:var(--acc);animation:gl1 3.6s steps(1) 2.6s infinite}
+    .name::after{color:#18b8c9;animation:gl2 3.6s steps(1) 2.6s infinite}
+    @keyframes gl1{0%,86%,100%{clip-path:inset(0 0 100% 0);transform:none}87%{clip-path:inset(15% 0 55% 0);transform:translate(-6px,0)}90%{clip-path:inset(60% 0 10% 0);transform:translate(5px,0)}93%{clip-path:inset(35% 0 40% 0);transform:translate(-3px,0)}96%{clip-path:inset(0 0 85% 0);transform:translate(4px,0)}}
+    @keyframes gl2{0%,86%,100%{clip-path:inset(0 0 100% 0);transform:none}88%{clip-path:inset(50% 0 20% 0);transform:translate(6px,0)}91%{clip-path:inset(10% 0 70% 0);transform:translate(-5px,0)}94%{clip-path:inset(70% 0 5% 0);transform:translate(3px,0)}97%{clip-path:inset(25% 0 50% 0);transform:translate(-4px,0)}}
     .role{font-size:1.5rem;font-weight:700;color:var(--acc);margin:0}
     .hero p.t{color:var(--muted);font-size:1.1rem;max-width:34rem}
     .cta-row{display:flex;gap:.8rem;flex-wrap:wrap;margin:1.5rem 0}
@@ -49,11 +55,19 @@ const shown = projects.slice(0, 6);
     .photo::before{content:"";position:absolute;inset:-14px;border:1px dashed var(--ink);border-radius:50%;animation:spin 18s linear infinite}
     .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:45% 30%;border-radius:50%}
     @keyframes spin{to{transform:rotate(360deg)}}
-    @media(max-width:860px){.hero{grid-template-columns:1fr}.photo{max-width:300px}}
+    @media(max-width:860px){
+      .hero{grid-template-columns:1fr;text-align:center;padding-top:6.5rem;padding-bottom:2.5rem;gap:2.2rem}
+      .photo{order:-1;max-width:min(62vw,250px)}
+      .name{display:block;font-size:clamp(2.1rem,10.5vw,4rem)}
+      .role{font-size:1.25rem}
+      .hero p.t{margin-inline:auto;font-size:1.02rem}
+      .cta-row{justify-content:center}
+    }
     @media(max-width:600px){.eyebrow{font-size:.62rem;letter-spacing:0}}
     /* marquee */
     .marq{overflow:hidden;border-block:1px solid var(--codeline);background:var(--code);padding:1.1rem 0}
     .track{display:flex;gap:3.5rem;width:max-content;animation:marquee 40s linear infinite;font-weight:700;color:#fff}
+    .tech{display:flex;align-items:center;gap:.7rem;white-space:nowrap}
     .marq:hover .track{animation-play-state:paused}
     @keyframes marquee{to{transform:translateX(-50%)}}
     /* headings */
@@ -67,8 +81,10 @@ const shown = projects.slice(0, 6);
     .card{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;transition:box-shadow .25s,border-color .25s;display:flex;flex-direction:column}
     .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px #0000001a;border-color:var(--ink)}
     .card[hidden]{display:none}
-    .thumb{height:150px;background:var(--code);display:flex;align-items:flex-end;padding:1rem;color:#8f8f95;font:.72rem/1.5 "JetBrains Mono Variable",monospace;position:relative;overflow:hidden}
-    .thumb b{position:absolute;right:1rem;top:.4rem;font-size:4.5rem;color:#ffffff12;font-family:"Manrope Variable"}
+    .thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#1b1b1f,var(--code));position:relative;overflow:hidden;display:grid;place-items:center}
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .6s}
+    .card:hover .thumb img{transform:scale(1.05)}
+    .thumb b{font:800 5rem "Manrope Variable";color:#ffffff22}
     .body{padding:1.3rem;display:flex;flex-direction:column;gap:.6rem;flex:1}
     .kind{font:700 .68rem "JetBrains Mono Variable",monospace;letter-spacing:.1em;color:var(--acc);text-transform:uppercase}
     .card h4{margin:0;font-size:1.3rem}.card p{margin:0;color:var(--muted);font-size:.93rem;flex:1}
@@ -76,14 +92,15 @@ const shown = projects.slice(0, 6);
     .lk{display:flex;gap:1rem;font-weight:700;font-size:.85rem}.lk a{color:var(--acc);text-decoration:none}
     /* services */
     .acc{border-top:1px solid var(--line)}
-    .acc details{border-bottom:1px solid var(--line);padding:1.3rem 0}
-    .acc summary{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:1.5rem;font-weight:700;list-style:none}
-    .acc summary::-webkit-details-marker{display:none}
-    .acc summary::after{content:"+";font:400 1.8rem "JetBrains Mono Variable";color:var(--acc);transition:.2s}
-    .acc details[open] summary::after{transform:rotate(45deg)}
-    .acc summary span{flex:1}
-    .acc summary small{font:.75rem "JetBrains Mono Variable";color:var(--muted);margin-right:1rem}
-    .acc p{color:var(--muted);margin:.8rem 0 0;max-width:40rem}
+    .acc .sv{border-bottom:1px solid var(--line);padding:1.3rem 0;outline:none;cursor:pointer}
+    .acc .sh{display:flex;align-items:center;font-size:1.5rem;font-weight:700;transition:color .3s,padding .3s}
+    .acc .sh span{flex:1}
+    .acc .sh small{font:.75rem "JetBrains Mono Variable",monospace;color:var(--muted);margin-right:1rem}
+    .acc .sh::after{content:"+";font:400 1.8rem "JetBrains Mono Variable",monospace;color:var(--acc);transition:transform .3s}
+    .acc .sb{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
+    .acc .sb p{overflow:hidden;min-height:0;margin:0;color:var(--muted);max-width:40rem}
+    .acc .sv:focus .sb{grid-template-rows:1fr}.acc .sv:focus .sb p{margin-top:.8rem}.acc .sv:focus .sh::after{transform:rotate(45deg)}
+    @media(hover:hover){.acc .sv:hover .sb{grid-template-rows:1fr}.acc .sv:hover .sb p{margin-top:.8rem}.acc .sv:hover .sh{color:var(--acc);padding-left:.6rem}.acc .sv:hover .sh::after{transform:rotate(45deg)}}
     /* experience */
     .tl{border-left:2px solid var(--line);margin-left:.4rem}
     .tl div{position:relative;padding:0 0 2rem 1.8rem}
@@ -107,13 +124,13 @@ const shown = projects.slice(0, 6);
     @media(pointer:coarse){.lk a{padding:.7rem 0}.filters button{padding:.7rem 1.1rem}.acc summary{padding:.3rem 0}.cg button{min-height:40px}}
     footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.85rem}
     footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
   </style>
 </head>
 <body>
   <div id="bar"></div><div id="cur"></div>
   <nav><div class="wrap">
-    <a class="brand" href="#top">Bonjour, {me.name.split(" ")[0]} <span class="avail"><i class="dot"></i>Disponible</span></a>
+    <a class="brand" href="#top"><span class="avail"><i class="dot"></i>Disponible</span></a>
     <div class="links">
       <a href="#projets">Projets<sup>[ {projects.length} ]</sup></a>
       <a href="#services">Services<sup>[ {services.length} ]</sup></a>
@@ -125,8 +142,8 @@ const shown = projects.slice(0, 6);
 
   <header class="wrap hero" id="top">
     <div class="reveal">
-      <div class="eyebrow mono">{me.name.toUpperCase().split("").join(" ")}</div>
-      <h1 class="name">{me.handle}<span style="color:var(--acc)">.</span></h1>
+      <div class="eyebrow mono">{"BONJOUR, JE SUIS".split("").join(" ")}</div>
+      <h1 class="name" data-text={me.name}>{me.name}</h1>
       <p class="role">{me.role}</p>
       <p class="t">{me.tagline}</p>
       <div class="cta-row"><a class="btn" href="#rdv">Collaborons</a><a class="btn ghost" href={me.github}>GitHub ↗</a></div>
@@ -134,7 +151,12 @@ const shown = projects.slice(0, 6);
     <div class="photo reveal"><img src={`${import.meta.env.BASE_URL}/profil.jpeg`} alt={`Portrait de ${me.name}`} width="800" height="1080" fetchpriority="high" /></div>
   </header>
 
-  <div class="marq" aria-hidden="true"><div class="track">{[...stack, ...stack, ...stack, ...stack].map((s) => <span>{s}</span>)}</div></div>
+  <div class="marq" aria-hidden="true"><div class="track">{[...stack, ...stack, ...stack, ...stack].map((n) => { const l = logo(n); return (
+      <span class="tech">
+        {l?.img && <img src={`${import.meta.env.BASE_URL}/${l.img}`} alt="" width="26" height="26" loading="lazy" />}
+        {l?.path && <svg viewBox="0 0 24 24" width="26" height="26" fill={l.color} aria-hidden="true"><path d={l.path} /></svg>}
+        {n}
+      </span>); })}</div></div>
 
   <section id="projets"><div class="wrap">
     <h2 class="s">/PROJETS</h2><h3 class="big reveal">Choisis ce que tu veux voir</h3>
@@ -145,7 +167,9 @@ const shown = projects.slice(0, 6);
     <div class="grid">
       {projects.map((p, i) => (
         <article class="card reveal" data-k={p.kind} data-extra={i >= shown.length ? "1" : undefined} hidden={i >= shown.length}>
-          <div class="thumb"><b>{p.title[0]}</b>$ git log --oneline<br />{p.tags.join(" · ")}</div>
+          <div class="thumb">
+            {p.img ? <img src={`${import.meta.env.BASE_URL}/${p.img}`} alt={`Capture de la page d'accueil de ${p.title}`} width="960" height="540" loading="lazy" /> : <b>{p.title[0]}</b>}
+          </div>
           <div class="body">
             <span class="kind">{p.kind === "real" ? "Projet réel" : "Exploration"}</span>
             <h4>{p.title}</h4><p>{p.desc}</p>
@@ -160,7 +184,7 @@ const shown = projects.slice(0, 6);
   <section id="services" style="background:var(--mist)"><div class="wrap">
     <h2 class="s">/SERVICES</h2><h3 class="big reveal">Ce que je peux faire pour toi</h3>
     <div class="acc">
-      {services.map((s, i) => <details open={i === 0}><summary><span>{s.t}</span><small>0{i + 1}</small></summary><p>{s.d}</p></details>)}
+      {services.map((s, i) => <div class="sv" tabindex="0"><div class="sh"><span>{s.t}</span><small>0{i + 1}</small></div><div class="sb"><p>{s.d}</p></div></div>)}
     </div>
   </div></section>
 
@@ -197,17 +221,18 @@ const shown = projects.slice(0, 6);
       // intro: nom lettre par lettre, puis le reste du hero
       const name = document.querySelector<HTMLElement>(".name")!;
       const txt = name.textContent!.trim();
-      name.innerHTML = [...txt].map((c, i) => `<span class="ch1"${i === txt.length - 1 ? ' style="color:var(--acc)"' : ""}>${c}</span>`).join("");
+      name.innerHTML = txt.split(" ").map((w) => `<span class="w">${[...w].map((c) => `<span class="ch1">${c}</span>`).join("")}</span>`).join(" ");
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      tl.from("nav", { yPercent: -150, autoAlpha: 0, duration: 0.8 });
       tl.from(".eyebrow", { y: 20, autoAlpha: 0, duration: 0.6 })
         .from(".ch1", { yPercent: 120, rotate: 12, autoAlpha: 0, stagger: 0.05, duration: 0.9 }, "-=0.3")
         .from(".role, .hero p.t, .cta-row", { y: 30, autoAlpha: 0, stagger: 0.12, duration: 0.8 }, "-=0.5")
         .from(".photo", { scale: 0.4, rotate: -90, autoAlpha: 0, duration: 1.2, ease: "elastic.out(1,0.6)" }, 0.3);
 
       // parallaxe de la photo au scroll + à la souris
-      gsap.to(".photo", { yPercent: 25, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      if (innerWidth > 860) gsap.to(".photo", { yPercent: 25, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
       const px = gsap.quickTo(".photo", "x", { duration: 0.6 }), py = gsap.quickTo(".photo", "rotation", { duration: 0.6 });
-      addEventListener("mousemove", (e) => { px((e.clientX / innerWidth - 0.5) * 30); py((e.clientX / innerWidth - 0.5) * 8); });
+      if (fine) addEventListener("mousemove", (e) => { px((e.clientX / innerWidth - 0.5) * 30); py((e.clientX / innerWidth - 0.5) * 8); });
 
       // barre de progression
       gsap.to("#bar", { scaleX: 1, ease: "none", scrollTrigger: { scrub: 0.2, start: 0, end: "max" } });
@@ -217,7 +242,7 @@ const shown = projects.slice(0, 6);
         gsap.from(el, { y: 60, autoAlpha: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%" } }));
       gsap.from(".card", { y: 80, rotateX: -15, autoAlpha: 0, duration: 0.9, stagger: 0.1, ease: "power3.out", scrollTrigger: { trigger: ".grid", start: "top 85%" } });
       gsap.from(".tl div", { x: -50, autoAlpha: 0, stagger: 0.2, duration: 0.8, scrollTrigger: { trigger: ".tl", start: "top 80%" } });
-      gsap.from(".acc details", { y: 40, autoAlpha: 0, stagger: 0.12, duration: 0.7, scrollTrigger: { trigger: ".acc", start: "top 85%" } });
+      gsap.from(".acc .sv", { y: 40, autoAlpha: 0, stagger: 0.12, duration: 0.7, scrollTrigger: { trigger: ".acc", start: "top 85%" } });
       gsap.utils.toArray<HTMLElement>(".thumb b").forEach((b) =>
         gsap.to(b, { yPercent: -60, ease: "none", scrollTrigger: { trigger: b, scrub: true } }));
 
@@ -247,7 +272,7 @@ const shown = projects.slice(0, 6);
       // curseur suiveur
       const cx = gsap.quickTo("#cur", "x", { duration: 0.25 }), cy = gsap.quickTo("#cur", "y", { duration: 0.25 });
       addEventListener("mousemove", (e) => { cx(e.clientX); cy(e.clientY); });
-      document.querySelectorAll("a,button,summary").forEach((el) => {
+      document.querySelectorAll("a,button,.sv").forEach((el) => {
         el.addEventListener("mouseenter", () => gsap.to("#cur", { scale: 3, duration: 0.3 }));
         el.addEventListener("mouseleave", () => gsap.to("#cur", { scale: 1, duration: 0.3 }));
       });
