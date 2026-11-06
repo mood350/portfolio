@@ -25,10 +25,6 @@ export const projects: Project[] = [
   { title: "ImmoCorp", img: "shots/immocorp.webp", kind: "real", desc: "Gestion immobilière: propriétés, locataires, baux, paiements et alertes, avec mode clair/sombre.", tags: ["Spring Boot", "Next.js", "Tailwind"], repo: "https://github.com/mood350/immocorp" },
   { title: "MyKpokpo", img: "shots/mykpokpo.webp", kind: "real", desc: "Plateforme B2B2C reliant garages et propriétaires de véhicules: rendez-vous, interventions, stock, facturation. Console web + app mobile.", tags: ["Spring Boot", "Next.js", "Expo"], repo: "https://github.com/mood350/my-kpokpo" },
   { title: "Miabôh — RSE", img: "shots/rse.webp", kind: "real", desc: "Site de formation RSE: parcours en 12 sections, 642 questions, quiz et progression sauvegardée.", tags: ["Next.js", "TypeScript"], repo: "https://github.com/mood350/rse" },
-  { title: "Anna", img: "shots/anna.webp", kind: "explo", desc: "Livre numérique interactif: pages qui se tournent au doigt, vidéos, musique, accessibilité (reduced-motion).", tags: ["Next.js 16", "TypeScript", "Web Audio"], repo: "https://github.com/mood350/anna" },
-  { title: "Security Template", kind: "explo", desc: "Template Spring Security réutilisable (JWT, rôles).", tags: ["Spring Boot", "JWT"], repo: "https://github.com/mood350/security-template-springboot" },
-  { title: "Cinemania", kind: "explo", desc: "Application cinéma en Angular.", tags: ["Angular"], repo: "https://github.com/mood350/cinemania" },
-  { title: "Chess", kind: "explo", desc: "Jeu d'échecs en C++.", tags: ["C++"], repo: "https://github.com/mood350/chess" },
 ];
 
 export const services = [
@@ -45,11 +41,3 @@ export const experience = [
   { role: "Développeur backend indépendant", org: "Kola, Atlas, Armin, ImmoCorp, MyKpokpo…", date: "2025 – aujourd'hui" },
 ];
 
-export const consoleErrors = [
-  "Uncaught TypeError: Cannot read properties of undefined (reading 'map')",
-  "SyntaxError: Unexpected token '<' in JSON at position 0",
-  "ReferenceError: userId is not defined",
-  "Warning: Each child in a list should have a unique \"key\" prop",
-  "CORS: No 'Access-Control-Allow-Origin' header is present",
-  "NullPointerException at com.app.service.UserService.find(UserService.java:42)",
-];

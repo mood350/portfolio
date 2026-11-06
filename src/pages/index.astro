@@ -2,8 +2,12 @@
 import "@fontsource-variable/manrope";
 import "@fontsource-variable/jetbrains-mono";
 import { logo } from "../icons";
-import { me, stack, projects, services, experience, consoleErrors } from "../data";
-const shown = projects.slice(0, 6);
+import { me, stack, projects, services, experience } from "../data";
+const stats = [
+  { n: projects.filter((p) => p.kind === "real").length, l: "Projets réels" },
+  { n: experience.filter((e) => e.date === "Stage").length, l: "Stages" },
+  { n: stack.length, l: "Technologies" },
+];
 ---
 <html lang="fr">
 <head>
@@ -69,9 +73,6 @@ const shown = projects.slice(0, 6);
     h2.s{font:700 .85rem "JetBrains Mono Variable",monospace;letter-spacing:.12em;color:var(--acc);margin:0 0 .6rem}
     h3.big{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.03em;margin:0 0 2rem}
     /* projects */
-    .filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;align-items:center}
-    .filters button{background:none;border:1px solid var(--line);padding:.45rem 1rem;border-radius:999px;font:600 .85rem inherit;font-family:inherit;cursor:pointer;color:var(--muted)}
-    .filters button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:1.2rem}
     .card{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;transition:box-shadow .25s,border-color .25s;display:flex;flex-direction:column}
     .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px #0000001a;border-color:var(--ink)}
@@ -101,9 +102,13 @@ const shown = projects.slice(0, 6);
     .tl div{position:relative;padding:0 0 2rem 1.8rem}
     .tl div::before{content:"";position:absolute;left:-7px;top:.45rem;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--acc)}
     .tl b{font-size:1.15rem;display:block}.tl span{color:var(--muted);font-size:.92rem}.tl em{display:block;font:.75rem "JetBrains Mono Variable";color:var(--acc);font-style:normal;margin-top:.2rem}
-    /* console */
-    .console{overflow:hidden;border-block:1px solid var(--codeline);background:#000;padding:.8rem 0;color:#ff6568;font:.8rem "JetBrains Mono Variable",monospace}
-    .console .track{animation-duration:60s;color:#ff6568;font-weight:400}
+    /* chiffres clés */
+    .stats{background:var(--code);color:#fff;border-block:1px solid var(--codeline)}
+    .stats .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding-block:3rem}
+    .stat{text-align:center}
+    .stat b{display:block;font-size:clamp(2.4rem,6vw,4rem);font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--acc)}
+    .stat span{display:block;margin-top:.5rem;font:.78rem "JetBrains Mono Variable",monospace;letter-spacing:.12em;text-transform:uppercase;color:#a8a8ad}
+    @media(max-width:640px){.stats .wrap{gap:1rem}.stat span{font-size:.62rem;letter-spacing:.06em}}
     /* formulaire */
     .form{display:grid;gap:1.1rem;border:1px solid var(--line);border-radius:22px;padding:1.6rem;background:#fff}
     .form label{display:grid;gap:.4rem;font-weight:700;font-size:.9rem}
@@ -114,7 +119,7 @@ const shown = projects.slice(0, 6);
     #status{margin:0;font-size:.85rem;color:var(--muted);min-height:1.3em}
     .book{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
     @media(max-width:860px){.book{grid-template-columns:1fr}}
-    @media(pointer:coarse){.lk a{padding:.7rem 0}.filters button{padding:.7rem 1.1rem}}
+    @media(pointer:coarse){.lk a{padding:.7rem 0}}
     footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.85rem}
     footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
     @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
@@ -151,14 +156,10 @@ const shown = projects.slice(0, 6);
       </span>); })}</div></div>
 
   <section id="projets"><div class="wrap">
-    <h2 class="s">/PROJETS</h2><h3 class="big reveal">Choisis ce que tu veux voir</h3>
-    <div class="filters" role="group" aria-label="Filtrer les projets">
-      <button class="on" data-f="all">Tous</button><button data-f="real">Projets réels</button><button data-f="explo">Explorations</button>
-      <button id="more" style="margin-left:auto;border-color:var(--ink);color:var(--ink)">Voir tout ({projects.length})</button>
-    </div>
+    <h2 class="s">/PROJETS</h2><h3 class="big reveal">Ce que j'ai construit</h3>
     <div class="grid">
-      {projects.map((p, i) => (
-        <article class="card reveal" data-k={p.kind} data-extra={i >= shown.length ? "1" : undefined} hidden={i >= shown.length}>
+      {projects.map((p) => (
+        <article class="card reveal">
           <div class="thumb">
             {p.img ? <img src={`${import.meta.env.BASE_URL}/${p.img}`} alt={`Capture de la page d'accueil de ${p.title}`} width="960" height="540" loading="lazy" /> : <b>{p.title[0]}</b>}
           </div>
@@ -185,7 +186,9 @@ const shown = projects.slice(0, 6);
     <div class="tl">{experience.map((e) => <div><b>{e.role}</b><span>{e.org}</span><em>{e.date}</em></div>)}</div>
   </div></section>
 
-  <div class="console mono" aria-hidden="true"><div class="track">{[...consoleErrors, ...consoleErrors, ...consoleErrors].map((e) => <span>✖ {e}</span>)}</div></div>
+  <section class="stats"><div class="wrap">
+    {stats.map((x) => <div class="stat"><b data-n={x.n}>{x.n}</b><span>{x.l}</span></div>)}
+  </div></section>
 
   <section id="formulaire"><div class="wrap book">
     <div>
@@ -276,27 +279,18 @@ const shown = projects.slice(0, 6);
         el.addEventListener("mouseleave", () => gsap.to("#cur", { scale: 1, duration: 0.3 }));
       });
 
-      addEventListener("load", () => ScrollTrigger.refresh());
+      document.querySelectorAll<HTMLElement>(".stat b").forEach((b) => {
+        const end = +b.dataset.n!, o = { v: 0 };
+        b.textContent = "0";
+        ScrollTrigger.create({ trigger: b, start: "top 90%", once: true, onEnter: () => gsap.to(o, { v: end, duration: 1.6, ease: "power2.out", onUpdate: () => (b.textContent = String(Math.round(o.v))), onComplete: () => (b.textContent = String(end)) }) });
+      });
+      gsap.fromTo(".stat", { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.12, duration: 0.8, scrollTrigger: { trigger: ".stats", start: "top 85%", once: true } });
 
-      // les filtres changent la hauteur de la page
-      document.querySelector(".filters")!.addEventListener("click", () => setTimeout(() => {
-        ScrollTrigger.refresh();
-        gsap.fromTo(".card:not([hidden])", { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.06, duration: 0.5, overwrite: true });
-      }, 20));
+      addEventListener("load", () => ScrollTrigger.refresh());
     }
   </script>
 
   <script define:vars={{ email: me.email }}>
-    // project filters + "voir tout"
-    let all = false, f = "all";
-    const cards = [...document.querySelectorAll(".card")];
-    const apply = () => cards.forEach((c) => (c.hidden = (f !== "all" && c.dataset.k !== f) || (!all && c.dataset.extra === "1")));
-    document.querySelectorAll(".filters button[data-f]").forEach((b) => b.addEventListener("click", () => {
-      f = b.dataset.f; document.querySelectorAll(".filters button[data-f]").forEach((x) => x.classList.toggle("on", x === b)); apply();
-    }));
-    document.getElementById("more").addEventListener("click", (e) => { all = !all; e.target.textContent = all ? "Voir moins" : e.target.textContent; apply(); });
-    apply();
-
     // formulaire: pas de backend (site statique), on ouvre le mail pré-rempli
     document.getElementById("form").addEventListener("submit", (e) => {
       e.preventDefault();
