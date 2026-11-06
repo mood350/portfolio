@@ -26,11 +26,6 @@ const shown = projects.slice(0, 6);
     /* nav */
     nav{position:fixed;top:12px;left:0;right:0;margin:0 auto;width:fit-content;max-width:calc(100% - 24px);z-index:20;background:#ffffffcc;backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:999px;box-shadow:0 10px 30px #00000018}
     nav .wrap{display:flex;align-items:center;height:52px;max-width:none;margin:0;padding:0 .4rem 0 1.1rem;justify-content:center;gap:1.5rem}
-    .brand{font-weight:800;text-decoration:none;display:flex;gap:.6rem;align-items:center}
-    .avail{display:inline-flex;align-items:center;gap:.5rem;font-size:1rem;font-weight:600;color:var(--ink)}
-    .dot{position:relative;width:8px;height:8px;border-radius:50%;background:var(--ok)}
-    .dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--ok);animation:ping 2s ease-out infinite}
-    @keyframes ping{to{transform:scale(3);opacity:0}}
     .links{display:flex;gap:1.5rem;font-size:1.02rem;font-weight:500}.links a{text-decoration:none;color:var(--muted)}.links a:hover{color:var(--ink)}
     .links sup{font:.72rem "JetBrains Mono Variable",monospace;color:var(--acc);margin-left:.15rem}
     nav .btn{padding:.5rem 1.15rem;font-size:.98rem}
@@ -109,19 +104,17 @@ const shown = projects.slice(0, 6);
     /* console */
     .console{overflow:hidden;border-block:1px solid var(--codeline);background:#000;padding:.8rem 0;color:#ff6568;font:.8rem "JetBrains Mono Variable",monospace}
     .console .track{animation-duration:60s;color:#ff6568;font-weight:400}
-    /* booking */
-    .cal{max-width:420px;border:1px solid var(--line);border-radius:18px;padding:1.2rem}
-    .ch{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:.8rem;text-transform:capitalize}
-    .ch button{background:none;border:1px solid var(--line);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1rem}
-    .cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:.85rem}
-    .cg .h{color:var(--muted);font-size:.7rem;padding:.3rem}
-    .cg button{position:relative;aspect-ratio:1;border:0;background:var(--mist);border-radius:8px;cursor:pointer;font:inherit}
-    .cg button:disabled{background:none;color:#bbb;cursor:default}
-    .cg button.av::after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--ok)}
-    .cg button.sel{background:var(--ink);color:#fff}
+    /* formulaire */
+    .form{display:grid;gap:1.1rem;border:1px solid var(--line);border-radius:22px;padding:1.6rem;background:#fff}
+    .form label{display:grid;gap:.4rem;font-weight:700;font-size:.9rem}
+    .form input,.form select,.form textarea{font:500 1rem "Manrope Variable",system-ui,sans-serif;color:var(--ink);background:var(--mist);border:1px solid transparent;border-radius:12px;padding:.85rem 1rem;width:100%;transition:border-color .2s,background .2s}
+    .form textarea{resize:vertical;min-height:130px}
+    .form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--acc);background:#fff}
+    .form .btn{justify-self:start}
+    #status{margin:0;font-size:.85rem;color:var(--muted);min-height:1.3em}
     .book{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
     @media(max-width:860px){.book{grid-template-columns:1fr}}
-    @media(pointer:coarse){.lk a{padding:.7rem 0}.filters button{padding:.7rem 1.1rem}.acc summary{padding:.3rem 0}.cg button{min-height:40px}}
+    @media(pointer:coarse){.lk a{padding:.7rem 0}.filters button{padding:.7rem 1.1rem}}
     footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.85rem}
     footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
     @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
@@ -130,14 +123,13 @@ const shown = projects.slice(0, 6);
 <body>
   <div id="bar"></div><div id="cur"></div>
   <nav><div class="wrap">
-    <a class="brand" href="#top"><span class="avail"><i class="dot"></i>Disponible</span></a>
     <div class="links">
       <a href="#projets">Projets<sup>[ {projects.length} ]</sup></a>
       <a href="#services">Services<sup>[ {services.length} ]</sup></a>
       <a href="#experience">Expérience</a>
       <a href="#contact">Contact</a>
     </div>
-    <a class="btn" href="#rdv">Parlons-en</a>
+    <a class="btn" href="#formulaire">Parlons-en</a>
   </div></nav>
 
   <header class="wrap hero" id="top">
@@ -146,7 +138,7 @@ const shown = projects.slice(0, 6);
       <h1 class="name" data-text={me.name}>{me.name}</h1>
       <p class="role">{me.role}</p>
       <p class="t">{me.tagline}</p>
-      <div class="cta-row"><a class="btn" href="#rdv">Collaborons</a><a class="btn ghost" href={me.github}>GitHub ↗</a></div>
+      <div class="cta-row"><a class="btn" href="#formulaire">Collaborons</a><a class="btn ghost" href={me.github}>GitHub ↗</a></div>
     </div>
     <div class="photo reveal"><img src={`${import.meta.env.BASE_URL}/profil.jpeg`} alt={`Portrait de ${me.name}`} width="800" height="1080" fetchpriority="high" /></div>
   </header>
@@ -190,19 +182,26 @@ const shown = projects.slice(0, 6);
 
   <section id="experience"><div class="wrap">
     <h2 class="s">/EXPÉRIENCE</h2><h3 class="big reveal">Parcours</h3>
-    <div class="tl">{experience.map((e) => <div class="reveal"><b>{e.role}</b><span>{e.org}</span><em>{e.date}</em></div>)}</div>
+    <div class="tl">{experience.map((e) => <div><b>{e.role}</b><span>{e.org}</span><em>{e.date}</em></div>)}</div>
   </div></section>
 
   <div class="console mono" aria-hidden="true"><div class="track">{[...consoleErrors, ...consoleErrors, ...consoleErrors].map((e) => <span>✖ {e}</span>)}</div></div>
 
-  <section id="rdv"><div class="wrap book">
+  <section id="formulaire"><div class="wrap book">
     <div>
-      <h2 class="s">/RENDEZ-VOUS</h2><h3 class="big reveal">Réservons un créneau</h3>
-      <p style="color:var(--muted);max-width:28rem">Choisis un jour (les points verts sont disponibles, du lundi au vendredi). Ça ouvre un email prérempli.</p>
-      <p id="picked" class="mono" style="color:var(--acc)"></p>
-      <a class="btn" id="send" href={`mailto:${me.email}`}>Envoyer la demande</a>
+      <h2 class="s">/FORMULAIRE</h2><h3 class="big reveal">Parlons de ton projet</h3>
+      <p style="color:var(--muted);max-width:28rem">Décris ton besoin en quelques lignes. Le message s'ouvre dans ton application mail, prêt à être envoyé à {me.email}.</p>
     </div>
-    <div class="cal" id="cal"></div>
+    <form class="form" id="form">
+      <label>Nom<input name="nom" required maxlength="80" autocomplete="name" /></label>
+      <label>Email<input name="email" type="email" required maxlength="120" autocomplete="email" /></label>
+      <label>Type de projet
+        <select name="type">{services.map((x) => <option>{x.t}</option>)}<option>Autre</option></select>
+      </label>
+      <label>Message<textarea name="msg" required rows="5" maxlength="1200"></textarea></label>
+      <button class="btn" type="submit">Envoyer le message</button>
+      <p id="status" role="status"></p>
+    </form>
   </div></section>
 
   <section id="contact" style="background:var(--ink);color:#fff;text-align:center"><div class="wrap">
@@ -241,8 +240,8 @@ const shown = projects.slice(0, 6);
       gsap.utils.toArray<HTMLElement>(".reveal:not(.card):not(.hero *)").forEach((el) =>
         gsap.from(el, { y: 60, autoAlpha: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%" } }));
       gsap.from(".card", { y: 80, rotateX: -15, autoAlpha: 0, duration: 0.9, stagger: 0.1, ease: "power3.out", scrollTrigger: { trigger: ".grid", start: "top 85%" } });
-      gsap.from(".tl div", { x: -50, autoAlpha: 0, stagger: 0.2, duration: 0.8, scrollTrigger: { trigger: ".tl", start: "top 80%" } });
-      gsap.from(".acc .sv", { y: 40, autoAlpha: 0, stagger: 0.12, duration: 0.7, scrollTrigger: { trigger: ".acc", start: "top 85%" } });
+      gsap.fromTo(".tl > div", { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, stagger: 0.2, duration: 0.8, scrollTrigger: { trigger: ".tl", start: "top 85%", once: true } });
+      gsap.fromTo(".acc .sv", { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.12, duration: 0.7, scrollTrigger: { trigger: ".acc", start: "top 85%", once: true } });
       gsap.utils.toArray<HTMLElement>(".thumb b").forEach((b) =>
         gsap.to(b, { yPercent: -60, ease: "none", scrollTrigger: { trigger: b, scrub: true } }));
 
@@ -277,6 +276,8 @@ const shown = projects.slice(0, 6);
         el.addEventListener("mouseleave", () => gsap.to("#cur", { scale: 1, duration: 0.3 }));
       });
 
+      addEventListener("load", () => ScrollTrigger.refresh());
+
       // les filtres changent la hauteur de la page
       document.querySelector(".filters")!.addEventListener("click", () => setTimeout(() => {
         ScrollTrigger.refresh();
@@ -296,29 +297,18 @@ const shown = projects.slice(0, 6);
     document.getElementById("more").addEventListener("click", (e) => { all = !all; e.target.textContent = all ? "Voir moins" : e.target.textContent; apply(); });
     apply();
 
-    // booking calendar (front-only: ouvre un mailto)
-    const cal = document.getElementById("cal"), picked = document.getElementById("picked"), send = document.getElementById("send");
-    let view = new Date(); view.setDate(1); let sel = null;
-    const fmt = (d) => d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
-    function draw() {
-      const today = new Date(); today.setHours(0, 0, 0, 0);
-      const first = (view.getDay() + 6) % 7, days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
-      let h = `<div class="ch"><button id="p" aria-label="Mois précédent">‹</button><span>${view.toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}</span><button id="x" aria-label="Mois suivant">›</button></div><div class="cg">`;
-      "LMMJVSD".split("").forEach((d) => (h += `<span class="h">${d}</span>`));
-      for (let k = 0; k < first; k++) h += "<span></span>";
-      for (let d = 1; d <= days; d++) {
-        const dt = new Date(view.getFullYear(), view.getMonth(), d), ok = dt >= today && dt.getDay() % 6 !== 0;
-        h += `<button data-d="${dt.getTime()}" class="${ok ? "av" : ""} ${sel === dt.getTime() ? "sel" : ""}" ${ok ? "" : "disabled"}>${d}</button>`;
-      }
-      cal.innerHTML = h + "</div>";
-      cal.querySelector("#p").onclick = () => { view.setMonth(view.getMonth() - 1); draw(); };
-      cal.querySelector("#x").onclick = () => { view.setMonth(view.getMonth() + 1); draw(); };
-      cal.querySelectorAll("button[data-d]").forEach((b) => (b.onclick = () => {
-        sel = +b.dataset.d; const t = fmt(new Date(sel)); picked.textContent = "→ " + t;
-        send.href = `mailto:${email}?subject=${encodeURIComponent("Rendez-vous")}&body=${encodeURIComponent("Bonjour, je souhaite un rendez-vous le " + t + ".")}`; draw();
-      }));
-    }
-    draw();
+    // formulaire: pas de backend (site statique), on ouvre le mail pré-rempli
+    document.getElementById("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const d = new FormData(e.target), status = document.getElementById("status");
+      const body = `Nom: ${d.get("nom")}
+Email: ${d.get("email")}
+Projet: ${d.get("type")}
+
+${d.get("msg")}`;
+      location.href = `mailto:${email}?subject=${encodeURIComponent("Contact portfolio — " + d.get("type"))}&body=${encodeURIComponent(body)}`;
+      status.textContent = `Ton application mail va s'ouvrir. Sinon, écris-moi directement à ${email}.`;
+    });
   </script>
 </body>
 </html>
