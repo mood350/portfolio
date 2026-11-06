@@ -1,0 +1,299 @@
+---
+import "@fontsource-variable/manrope";
+import "@fontsource-variable/jetbrains-mono";
+import { me, stack, projects, services, experience, consoleErrors } from "../data";
+const shown = projects.slice(0, 6);
+---
+<html lang="fr">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{me.name} — {me.role}</title>
+  <meta name="description" content={me.tagline} />
+  <style is:global>
+    :root{--paper:#fff;--ink:#151515;--soft:#262626;--line:#e8e8e6;--mist:#f5f5f4;--muted:#6b6b6b;--acc:#d9653b;--ok:#3fb56b;--code:#0f0f10;--codeline:#26262a;--panel:#161618}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 "Manrope Variable",system-ui,sans-serif}
+    .mono{font-family:"JetBrains Mono Variable",ui-monospace,monospace}
+    a{color:inherit}
+    .wrap{max-width:1180px;margin:auto;padding:0 5vw}
+    section{padding:6rem 0}
+    #bar{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--acc);transform-origin:0 50%;transform:scaleX(0);z-index:50}
+    #cur{position:fixed;top:0;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--acc);mix-blend-mode:multiply;pointer-events:none;z-index:60;display:none}
+    @media(pointer:fine){#cur{display:block}}
+    .ch1{display:inline-block;will-change:transform}
+    .card{transform-style:preserve-3d;will-change:transform}
+    /* nav */
+    nav{position:sticky;top:0;z-index:20;background:#ffffffd9;backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+    nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .brand{font-weight:800;text-decoration:none;display:flex;gap:.6rem;align-items:center}
+    .avail{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--muted)}
+    .dot{position:relative;width:8px;height:8px;border-radius:50%;background:var(--ok)}
+    .dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--ok);animation:ping 2s ease-out infinite}
+    @keyframes ping{to{transform:scale(3);opacity:0}}
+    .links{display:flex;gap:1.6rem;font-size:.9rem}.links a{text-decoration:none;color:var(--muted)}.links a:hover{color:var(--ink)}
+    .links sup{font:.65rem "JetBrains Mono Variable",monospace;color:var(--acc);margin-left:.15rem}
+    .btn{display:inline-block;background:var(--ink);color:#fff;border:1px solid var(--ink);padding:.7rem 1.3rem;border-radius:999px;text-decoration:none;font-weight:700;font-size:.9rem;cursor:pointer;transition:background .2s,border-color .2s;font-family:inherit}
+    .btn:hover{background:var(--acc);border-color:var(--acc);transform:translateY(-2px)}
+    .btn.ghost{background:none;color:var(--ink)}.btn.ghost:hover{color:#fff}
+    @media(max-width:760px){.links{display:none}}
+    /* hero */
+    .hero{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem;align-items:center;padding-top:5rem;padding-bottom:3.5rem}
+    .eyebrow{font-size:.8rem;color:var(--muted);letter-spacing:.3em}
+    .name{position:relative;font-size:clamp(2.6rem,8vw,6rem);line-height:1;font-weight:800;letter-spacing:-.04em;margin:1rem 0;display:inline-block}
+    .name:hover{animation:glitch 0.4s steps(2) 2}
+    @keyframes glitch{0%{text-shadow:3px 0 var(--acc),-3px 0 #4cc}50%{text-shadow:-3px 0 var(--acc),3px 0 #4cc;transform:translateX(2px)}100%{text-shadow:none}}
+    .role{font-size:1.5rem;font-weight:700;color:var(--acc);margin:0}
+    .hero p.t{color:var(--muted);font-size:1.1rem;max-width:34rem}
+    .cta-row{display:flex;gap:.8rem;flex-wrap:wrap;margin:1.5rem 0}
+    .photo{position:relative;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffd9c9,var(--acc));display:grid;place-items:center;font:800 5rem "Manrope Variable";color:#fff;max-width:380px;justify-self:center;width:100%}
+    .photo::before{content:"";position:absolute;inset:-14px;border:1px dashed var(--ink);border-radius:50%;animation:spin 18s linear infinite}
+    .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:45% 30%;border-radius:50%}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media(max-width:860px){.hero{grid-template-columns:1fr}.photo{max-width:300px}}
+    @media(max-width:600px){.eyebrow{font-size:.62rem;letter-spacing:0}}
+    /* marquee */
+    .marq{overflow:hidden;border-block:1px solid var(--codeline);background:var(--code);padding:1.1rem 0}
+    .track{display:flex;gap:3.5rem;width:max-content;animation:marquee 40s linear infinite;font-weight:700;color:#fff}
+    .marq:hover .track{animation-play-state:paused}
+    @keyframes marquee{to{transform:translateX(-50%)}}
+    /* headings */
+    h2.s{font:700 .85rem "JetBrains Mono Variable",monospace;letter-spacing:.12em;color:var(--acc);margin:0 0 .6rem}
+    h3.big{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.03em;margin:0 0 2rem}
+    /* projects */
+    .filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;align-items:center}
+    .filters button{background:none;border:1px solid var(--line);padding:.45rem 1rem;border-radius:999px;font:600 .85rem inherit;font-family:inherit;cursor:pointer;color:var(--muted)}
+    .filters button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:1.2rem}
+    .card{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;transition:box-shadow .25s,border-color .25s;display:flex;flex-direction:column}
+    .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px #0000001a;border-color:var(--ink)}
+    .card[hidden]{display:none}
+    .thumb{height:150px;background:var(--code);display:flex;align-items:flex-end;padding:1rem;color:#8f8f95;font:.72rem/1.5 "JetBrains Mono Variable",monospace;position:relative;overflow:hidden}
+    .thumb b{position:absolute;right:1rem;top:.4rem;font-size:4.5rem;color:#ffffff12;font-family:"Manrope Variable"}
+    .body{padding:1.3rem;display:flex;flex-direction:column;gap:.6rem;flex:1}
+    .kind{font:700 .68rem "JetBrains Mono Variable",monospace;letter-spacing:.1em;color:var(--acc);text-transform:uppercase}
+    .card h4{margin:0;font-size:1.3rem}.card p{margin:0;color:var(--muted);font-size:.93rem;flex:1}
+    .tags{display:flex;flex-wrap:wrap;gap:.4rem}.tags span{font-size:.72rem;background:var(--mist);padding:.2rem .65rem;border-radius:999px}
+    .lk{display:flex;gap:1rem;font-weight:700;font-size:.85rem}.lk a{color:var(--acc);text-decoration:none}
+    /* services */
+    .acc{border-top:1px solid var(--line)}
+    .acc details{border-bottom:1px solid var(--line);padding:1.3rem 0}
+    .acc summary{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:1.5rem;font-weight:700;list-style:none}
+    .acc summary::-webkit-details-marker{display:none}
+    .acc summary::after{content:"+";font:400 1.8rem "JetBrains Mono Variable";color:var(--acc);transition:.2s}
+    .acc details[open] summary::after{transform:rotate(45deg)}
+    .acc summary span{flex:1}
+    .acc summary small{font:.75rem "JetBrains Mono Variable";color:var(--muted);margin-right:1rem}
+    .acc p{color:var(--muted);margin:.8rem 0 0;max-width:40rem}
+    /* experience */
+    .tl{border-left:2px solid var(--line);margin-left:.4rem}
+    .tl div{position:relative;padding:0 0 2rem 1.8rem}
+    .tl div::before{content:"";position:absolute;left:-7px;top:.45rem;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--acc)}
+    .tl b{font-size:1.15rem;display:block}.tl span{color:var(--muted);font-size:.92rem}.tl em{display:block;font:.75rem "JetBrains Mono Variable";color:var(--acc);font-style:normal;margin-top:.2rem}
+    /* console */
+    .console{overflow:hidden;border-block:1px solid var(--codeline);background:#000;padding:.8rem 0;color:#ff6568;font:.8rem "JetBrains Mono Variable",monospace}
+    .console .track{animation-duration:60s;color:#ff6568;font-weight:400}
+    /* booking */
+    .cal{max-width:420px;border:1px solid var(--line);border-radius:18px;padding:1.2rem}
+    .ch{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:.8rem;text-transform:capitalize}
+    .ch button{background:none;border:1px solid var(--line);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1rem}
+    .cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:.85rem}
+    .cg .h{color:var(--muted);font-size:.7rem;padding:.3rem}
+    .cg button{position:relative;aspect-ratio:1;border:0;background:var(--mist);border-radius:8px;cursor:pointer;font:inherit}
+    .cg button:disabled{background:none;color:#bbb;cursor:default}
+    .cg button.av::after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--ok)}
+    .cg button.sel{background:var(--ink);color:#fff}
+    .book{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+    @media(max-width:860px){.book{grid-template-columns:1fr}}
+    @media(pointer:coarse){.lk a{padding:.7rem 0}.filters button{padding:.7rem 1.1rem}.acc summary{padding:.3rem 0}.cg button{min-height:40px}}
+    footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.85rem}
+    footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <div id="bar"></div><div id="cur"></div>
+  <nav><div class="wrap">
+    <a class="brand" href="#top">Bonjour, {me.name.split(" ")[0]} <span class="avail"><i class="dot"></i>Disponible</span></a>
+    <div class="links">
+      <a href="#projets">Projets<sup>[ {projects.length} ]</sup></a>
+      <a href="#services">Services<sup>[ {services.length} ]</sup></a>
+      <a href="#experience">Expérience</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="btn" href="#rdv">Parlons-en</a>
+  </div></nav>
+
+  <header class="wrap hero" id="top">
+    <div class="reveal">
+      <div class="eyebrow mono">{me.name.toUpperCase().split("").join(" ")}</div>
+      <h1 class="name">{me.handle}<span style="color:var(--acc)">.</span></h1>
+      <p class="role">{me.role}</p>
+      <p class="t">{me.tagline}</p>
+      <div class="cta-row"><a class="btn" href="#rdv">Collaborons</a><a class="btn ghost" href={me.github}>GitHub ↗</a></div>
+    </div>
+    <div class="photo reveal"><img src={`${import.meta.env.BASE_URL}/profil.jpeg`} alt={`Portrait de ${me.name}`} width="800" height="1080" fetchpriority="high" /></div>
+  </header>
+
+  <div class="marq" aria-hidden="true"><div class="track">{[...stack, ...stack, ...stack, ...stack].map((s) => <span>{s}</span>)}</div></div>
+
+  <section id="projets"><div class="wrap">
+    <h2 class="s">/PROJETS</h2><h3 class="big reveal">Choisis ce que tu veux voir</h3>
+    <div class="filters" role="group" aria-label="Filtrer les projets">
+      <button class="on" data-f="all">Tous</button><button data-f="real">Projets réels</button><button data-f="explo">Explorations</button>
+      <button id="more" style="margin-left:auto;border-color:var(--ink);color:var(--ink)">Voir tout ({projects.length})</button>
+    </div>
+    <div class="grid">
+      {projects.map((p, i) => (
+        <article class="card reveal" data-k={p.kind} data-extra={i >= shown.length ? "1" : undefined} hidden={i >= shown.length}>
+          <div class="thumb"><b>{p.title[0]}</b>$ git log --oneline<br />{p.tags.join(" · ")}</div>
+          <div class="body">
+            <span class="kind">{p.kind === "real" ? "Projet réel" : "Exploration"}</span>
+            <h4>{p.title}</h4><p>{p.desc}</p>
+            <div class="tags">{p.tags.map((t) => <span>{t}</span>)}</div>
+            <div class="lk">{p.demo && <a href={p.demo}>Démo ↗</a>}{p.repo && <a href={p.repo}>Code ↗</a>}</div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div></section>
+
+  <section id="services" style="background:var(--mist)"><div class="wrap">
+    <h2 class="s">/SERVICES</h2><h3 class="big reveal">Ce que je peux faire pour toi</h3>
+    <div class="acc">
+      {services.map((s, i) => <details open={i === 0}><summary><span>{s.t}</span><small>0{i + 1}</small></summary><p>{s.d}</p></details>)}
+    </div>
+  </div></section>
+
+  <section id="experience"><div class="wrap">
+    <h2 class="s">/EXPÉRIENCE</h2><h3 class="big reveal">Parcours</h3>
+    <div class="tl">{experience.map((e) => <div class="reveal"><b>{e.role}</b><span>{e.org}</span><em>{e.date}</em></div>)}</div>
+  </div></section>
+
+  <div class="console mono" aria-hidden="true"><div class="track">{[...consoleErrors, ...consoleErrors, ...consoleErrors].map((e) => <span>✖ {e}</span>)}</div></div>
+
+  <section id="rdv"><div class="wrap book">
+    <div>
+      <h2 class="s">/RENDEZ-VOUS</h2><h3 class="big reveal">Réservons un créneau</h3>
+      <p style="color:var(--muted);max-width:28rem">Choisis un jour (les points verts sont disponibles, du lundi au vendredi). Ça ouvre un email prérempli.</p>
+      <p id="picked" class="mono" style="color:var(--acc)"></p>
+      <a class="btn" id="send" href={`mailto:${me.email}`}>Envoyer la demande</a>
+    </div>
+    <div class="cal" id="cal"></div>
+  </div></section>
+
+  <section id="contact" style="background:var(--ink);color:#fff;text-align:center"><div class="wrap">
+    <h2 class="s">/CONTACT</h2><h3 class="big">Un projet en tête ?</h3>
+    <a class="btn" style="background:var(--acc);border-color:var(--acc)" href={`mailto:${me.email}`}>{me.email}</a>
+  </div></section>
+  <footer><div class="wrap"><span>© {new Date().getFullYear()} {me.name}</span><span class="mono">Codé avec Astro &amp; beaucoup de café</span></div></footer>
+
+  <script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+
+    const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // intro: nom lettre par lettre, puis le reste du hero
+      const name = document.querySelector<HTMLElement>(".name")!;
+      const txt = name.textContent!.trim();
+      name.innerHTML = [...txt].map((c, i) => `<span class="ch1"${i === txt.length - 1 ? ' style="color:var(--acc)"' : ""}>${c}</span>`).join("");
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      tl.from(".eyebrow", { y: 20, autoAlpha: 0, duration: 0.6 })
+        .from(".ch1", { yPercent: 120, rotate: 12, autoAlpha: 0, stagger: 0.05, duration: 0.9 }, "-=0.3")
+        .from(".role, .hero p.t, .cta-row", { y: 30, autoAlpha: 0, stagger: 0.12, duration: 0.8 }, "-=0.5")
+        .from(".photo", { scale: 0.4, rotate: -90, autoAlpha: 0, duration: 1.2, ease: "elastic.out(1,0.6)" }, 0.3);
+
+      // parallaxe de la photo au scroll + à la souris
+      gsap.to(".photo", { yPercent: 25, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      const px = gsap.quickTo(".photo", "x", { duration: 0.6 }), py = gsap.quickTo(".photo", "rotation", { duration: 0.6 });
+      addEventListener("mousemove", (e) => { px((e.clientX / innerWidth - 0.5) * 30); py((e.clientX / innerWidth - 0.5) * 8); });
+
+      // barre de progression
+      gsap.to("#bar", { scaleX: 1, ease: "none", scrollTrigger: { scrub: 0.2, start: 0, end: "max" } });
+
+      // apparition au scroll
+      gsap.utils.toArray<HTMLElement>(".reveal:not(.card):not(.hero *)").forEach((el) =>
+        gsap.from(el, { y: 60, autoAlpha: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%" } }));
+      gsap.from(".card", { y: 80, rotateX: -15, autoAlpha: 0, duration: 0.9, stagger: 0.1, ease: "power3.out", scrollTrigger: { trigger: ".grid", start: "top 85%" } });
+      gsap.from(".tl div", { x: -50, autoAlpha: 0, stagger: 0.2, duration: 0.8, scrollTrigger: { trigger: ".tl", start: "top 80%" } });
+      gsap.from(".acc details", { y: 40, autoAlpha: 0, stagger: 0.12, duration: 0.7, scrollTrigger: { trigger: ".acc", start: "top 85%" } });
+      gsap.utils.toArray<HTMLElement>(".thumb b").forEach((b) =>
+        gsap.to(b, { yPercent: -60, ease: "none", scrollTrigger: { trigger: b, scrub: true } }));
+
+      // bandeaux: défilement lié à la vitesse du scroll
+      document.querySelectorAll<HTMLElement>(".track").forEach((t, i) => {
+        const tw = gsap.to(t, { xPercent: -50, ease: "none", duration: i ? 60 : 40, repeat: -1 });
+        t.style.animation = "none";
+        ScrollTrigger.create({ onUpdate: (s) => gsap.to(tw, { timeScale: 1 + Math.abs(s.getVelocity()) / 300, duration: 0.2, overwrite: true, onComplete: () => gsap.to(tw, { timeScale: 1, duration: 1 }) }) });
+        if (fine) t.parentElement!.addEventListener("mouseenter", () => gsap.to(tw, { timeScale: 0, duration: 0.4 }));
+        if (fine) t.parentElement!.addEventListener("mouseleave", () => gsap.to(tw, { timeScale: 1, duration: 0.4 }));
+      });
+
+      // boutons magnétiques
+      (fine ? document.querySelectorAll<HTMLElement>(".btn") : []).forEach((b) => {
+        const mx = gsap.quickTo(b, "x", { duration: 0.4, ease: "power3" }), my = gsap.quickTo(b, "y", { duration: 0.4, ease: "power3" });
+        b.addEventListener("mousemove", (e) => { const r = b.getBoundingClientRect(); mx((e.clientX - r.left - r.width / 2) * 0.35); my((e.clientY - r.top - r.height / 2) * 0.35); });
+        b.addEventListener("mouseleave", () => { mx(0); my(0); });
+      });
+
+      // inclinaison 3D des cartes
+      (fine ? document.querySelectorAll<HTMLElement>(".card") : []).forEach((c) => {
+        c.addEventListener("mousemove", (e) => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+          gsap.to(c, { rotateY: x * 10, rotateX: -y * 10, transformPerspective: 800, duration: 0.4, overwrite: "auto" }); });
+        c.addEventListener("mouseleave", () => gsap.to(c, { rotateX: 0, rotateY: 0, duration: 0.6 }));
+      });
+
+      // curseur suiveur
+      const cx = gsap.quickTo("#cur", "x", { duration: 0.25 }), cy = gsap.quickTo("#cur", "y", { duration: 0.25 });
+      addEventListener("mousemove", (e) => { cx(e.clientX); cy(e.clientY); });
+      document.querySelectorAll("a,button,summary").forEach((el) => {
+        el.addEventListener("mouseenter", () => gsap.to("#cur", { scale: 3, duration: 0.3 }));
+        el.addEventListener("mouseleave", () => gsap.to("#cur", { scale: 1, duration: 0.3 }));
+      });
+
+      // les filtres changent la hauteur de la page
+      document.querySelector(".filters")!.addEventListener("click", () => setTimeout(() => {
+        ScrollTrigger.refresh();
+        gsap.fromTo(".card:not([hidden])", { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.06, duration: 0.5, overwrite: true });
+      }, 20));
+    }
+  </script>
+
+  <script define:vars={{ email: me.email }}>
+    // project filters + "voir tout"
+    let all = false, f = "all";
+    const cards = [...document.querySelectorAll(".card")];
+    const apply = () => cards.forEach((c) => (c.hidden = (f !== "all" && c.dataset.k !== f) || (!all && c.dataset.extra === "1")));
+    document.querySelectorAll(".filters button[data-f]").forEach((b) => b.addEventListener("click", () => {
+      f = b.dataset.f; document.querySelectorAll(".filters button[data-f]").forEach((x) => x.classList.toggle("on", x === b)); apply();
+    }));
+    document.getElementById("more").addEventListener("click", (e) => { all = !all; e.target.textContent = all ? "Voir moins" : e.target.textContent; apply(); });
+    apply();
+
+    // booking calendar (front-only: ouvre un mailto)
+    const cal = document.getElementById("cal"), picked = document.getElementById("picked"), send = document.getElementById("send");
+    let view = new Date(); view.setDate(1); let sel = null;
+    const fmt = (d) => d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+    function draw() {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const first = (view.getDay() + 6) % 7, days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+      let h = `<div class="ch"><button id="p" aria-label="Mois précédent">‹</button><span>${view.toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}</span><button id="x" aria-label="Mois suivant">›</button></div><div class="cg">`;
+      "LMMJVSD".split("").forEach((d) => (h += `<span class="h">${d}</span>`));
+      for (let k = 0; k < first; k++) h += "<span></span>";
+      for (let d = 1; d <= days; d++) {
+        const dt = new Date(view.getFullYear(), view.getMonth(), d), ok = dt >= today && dt.getDay() % 6 !== 0;
+        h += `<button data-d="${dt.getTime()}" class="${ok ? "av" : ""} ${sel === dt.getTime() ? "sel" : ""}" ${ok ? "" : "disabled"}>${d}</button>`;
+      }
+      cal.innerHTML = h + "</div>";
+      cal.querySelector("#p").onclick = () => { view.setMonth(view.getMonth() - 1); draw(); };
+      cal.querySelector("#x").onclick = () => { view.setMonth(view.getMonth() + 1); draw(); };
+      cal.querySelectorAll("button[data-d]").forEach((b) => (b.onclick = () => {
+        sel = +b.dataset.d; const t = fmt(new Date(sel)); picked.textContent = "→ " + t;
+        send.href = `mailto:${email}?subject=${encodeURIComponent("Rendez-vous")}&body=${encodeURIComponent("Bonjour, je souhaite un rendez-vous le " + t + ".")}`; draw();
+      }));
+    }
+    draw();
+  </script>
+</body>
+</html>
